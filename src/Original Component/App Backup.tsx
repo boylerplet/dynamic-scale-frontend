@@ -1,21 +1,14 @@
-import React, { MouseEvent, ReactElement, ReactNode, useEffect } from 'react';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-javascript'; // Language
-import 'prismjs/themes/prism.css'; // Theme
-
-import { Sketch } from '@uiw/react-color';
-// styles
-import './styles.css';
-// import './font.css';
-// components
 // import Scale from './Scale';
+import './styles.css';
+
+import React, { MouseEvent, ReactElement, ReactNode } from 'react';
+// import './font.css';
 
 type AppProps = {
 	labels?: Boolean;
 	half?: Boolean;
 	start?: string;
-	press: number[];
-	setPress: React.Dispatch<React.SetStateAction<number[]>>;
+	pressed?: Array<string | number | boolean>;
 	color_black?: string;
 	color_white?: string;
 	width: string;
@@ -36,16 +29,21 @@ const scale: Array<string> = [
 	'G#',
 ];
 
+let pressed: number[];
+
 function Scale({
 	labels = false,
 	half = true,
 	start = 'C',
-	press,
-	setPress,
 	color_white = '#ff0055',
 	color_black = '#aa0044',
 	width = '500px',
 }: AppProps) {
+	const [press, setPress] = React.useState([
+		1, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0,
+	]);
+
+	pressed = press;
 	function handlePressed(event: MouseEvent) {
 		if (event.target) {
 			let tempArray = [...press];
@@ -237,178 +235,43 @@ type Props = {
 	children: React.ReactNode;
 };
 
+const Card: React.FC<Props> = (props) => {
+	return <div className="card">{props.children}</div>;
+};
+
 function App() {
-	useEffect(() => {
-		Prism.highlightAll();
-	}, []);
-
-	const [press, setPress] = React.useState([
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-	]);
-
-	const [start, setStart] = React.useState('C');
-	const [labels, setLabels] = React.useState(false);
-	const [half, setHalf] = React.useState(false);
-	const [color_black, setColor_black] = React.useState('#AA0044');
-	const [color_white, setColor_white] = React.useState('#FF0055');
-	const [pickerBlack, setPickerBlack] = React.useState(false);
-	const [pickerWhite, setPickerWhite] = React.useState(false);
-	const [copyButton, setCopyButton] = React.useState('Copy');
-
-	const code = `<Scale
-	labels = ${labels}
-	half = ${half}
-	start = '${start}'
-	pressed = [${press}]
-	color_black = '${color_black}' 
-	color_white = '${color_white}'
-	width = '600px'
-/>
-`;
-	const Card: React.FC<Props> = (props) => {
-		return (
-			<div
-				className={start === String(props.children) ? 'card active' : 'card'}
-				onClick={() => setStart(String(props.children))}
-			>
-				{props.children}
-			</div>
-		);
+	const scaleProps = {
+		labels: true,
+		half: false,
+		start: 'C',
+		color_white: '#ff0055',
+		color_black: '#aa0044',
+		width: '800px',
 	};
-
-	function handleChangeLabels() {
-		setLabels(!labels);
-	}
-
-	function popupPickerBlack() {
-		setPickerBlack((prev) => !prev);
-	}
-	function popupPickerWhite() {
-		setPickerWhite((prev) => !prev);
-	}
-
 	return (
 		<div className="App">
-			<div className="Navbar">
-				<h1>Scale Maker</h1>
-			</div>
+			<div className="Navbar"></div>
 			<div className="container">
-				<h1>Make Your Scale</h1>
-				<Scale
-					start={start}
-					labels={labels}
-					half={half}
-					press={press}
-					setPress={setPress}
-					color_black={color_black}
-					color_white={color_white}
-					width="800px"
-				/>
+				<h1>Scale Maker</h1>
+				<Scale {...scaleProps} />
 				<div className="labelSelector">
 					<div className="line">
-						<p>Labels : </p>
-						<label
-							className="toggle"
-							htmlFor="labels"
-						>
-							<input
-								className="toggle__input"
-								name=""
-								type="checkbox"
-								id="labels"
-								onChange={handleChangeLabels}
-							></input>
-							<div className="toggle__fill"></div>
-						</label>
-					</div>
-					<div className="line">
-						<p>Half : </p>
-						<label
-							className="toggle"
-							htmlFor="half"
-						>
-							<input
-								className="toggle__input"
-								name=""
-								type="checkbox"
-								id="half"
-								onChange={() => setHalf(!half)}
-							></input>
-							<div className="toggle__fill"></div>
-						</label>
-					</div>
-					<div className="line">
-						<p>Start : </p>
-						<Card>C</Card>
-						<Card>D</Card>
-						<Card>E</Card>
-						<Card>F</Card>
-						<Card>G</Card>
-						<Card>A</Card>
-						<Card>B</Card>
-					</div>
-					<div className="line">
-						<p>Color Black : </p>
-						{pickerBlack && (
-							<Sketch
-								style={{
-									zIndex: 2,
-									marginLeft: 20,
-									position: 'absolute',
-									translate: '-10px 65px',
-								}}
-								color={color_black}
-								onChange={(color) => {
-									setColor_black(color.hex.toLocaleUpperCase());
-								}}
-							/>
-						)}
-						<div
-							className="card"
-							onClick={popupPickerBlack}
-						>
-							{color_black}
-						</div>
-					</div>
-					<div className="line">
-						<p>Color White : </p>
-						{pickerWhite && (
-							<Sketch
-								style={{
-									zIndex: 2,
-									marginLeft: 20,
-									position: 'absolute',
-									translate: '-10px 65px',
-								}}
-								color={color_white}
-								onChange={(color) => {
-									setColor_white(color.hex.toLocaleUpperCase());
-								}}
-							/>
-						)}
-						<div
-							className="card"
-							onClick={popupPickerWhite}
-						>
-							{color_white}
-						</div>
+						<p>True</p>
+						<Card id="1">true</Card>
 					</div>
 				</div>
 				<pre>
-					<code className="language-javascript">{code}</code>
-					<button
-						className="copyButton"
-						onClick={(e) => {
-							navigator.clipboard.writeText(code);
-							setCopyButton('Copied!');
-							setTimeout(() => {
-								setCopyButton('Copy');
-								// console.log(e.target as HTMLInputElement);
-							}, 1000);
-						}}
-					>
-						{copyButton}
-					</button>
+					<code>{`
+<Scale
+    labels = true
+    half = false
+    start = 'C'
+    pressed = ${pressed}
+    color_black = '#ff0055' 
+    color_white = '#aa0044'
+    width = '600px'
+/>
+`}</code>
 				</pre>
 			</div>
 		</div>

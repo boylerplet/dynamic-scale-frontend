@@ -1,0 +1,162 @@
+@font-face {
+    font-family: scaleFont;
+    src: url('./assets/AldotheApache.woff');
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+h1 {
+    font-family: scaleFont;
+    font-weight: 200;
+    font-size: 2.2rem;
+    /* font-weight: 800; */
+}
+h3 {
+    font-family: scaleFont;
+}
+
+.App {
+    display: block;
+}
+
+.Navbar {
+    padding-left: 50px;
+    font-weight: normal;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    height: 70px;
+    color: #f0f0f0;
+    background-color: #ff0055;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    width: 100%;
+    margin: auto;
+    padding: 30px 50px;
+    align-items: center;
+    
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;;
+    
+    svg {
+        justify-self: center;
+        align-self: center;
+    }
+}
+
+.line {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.2rem;
+    font-weight: 400;
+    font-size: 15pt;
+}
+
+.labelSelector {
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.card {
+    text-decoration: none;
+    user-select: none;
+    font-weight: 700;
+    color: #333333;
+    background-color: #f0f0f0;
+    border-radius: 0.4rem;
+    margin: 0px 5px;
+    padding: 10px;
+    min-width: 1.5rem;
+    text-align: center; 
+    height: auto;
+}
+
+.active {
+    color: #f0f0f0;
+    background-color: #ff0055;
+}
+
+pre {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.copyButton {
+    font-size: 12pt;
+    text-transform: capitalize;
+    text-decoration: none;
+    user-select: none;
+    font-weight: 700;
+    padding: 10px;
+    border-radius: 0.5rem;
+    min-width: 1.5rem;
+    text-align: center; 
+    height: auto;
+    border: none;
+    color: #f0f0f0;
+    background: #ff0055;
+    /* position: absolute;
+    translate: 740px; */
+    z-index: 1;
+}
+
+.toggle {
+    --width: 40px;
+    --height: calc(var(--width) / 2);
+    --border-radius: calc(var(--height) / 2);
+
+    padding-left: 10px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.toggle__input {
+    display: none;
+}
+
+.toggle__fill {
+    position: relative;
+    width: var(--width);
+    height: var(--height);
+    border-radius: var(--border-radius);
+    background: #dddddd;
+    transition: background 0.2s;
+}
+
+.toggle__fill::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: var(--height);
+    width: var(--height);
+    background: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+    border-radius: var(--border-radius);
+    transition: transform 0.2s;
+}
+
+.toggle__input:checked ~ .toggle__fill {
+    background: #ff0055;
+}
+
+.toggle__input:checked ~ .toggle__fill::after {
+    transform: translateX(var(--height));
+}
