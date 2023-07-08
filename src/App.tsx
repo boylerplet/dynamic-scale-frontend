@@ -355,7 +355,7 @@ function App() {
 									zIndex: 2,
 									marginLeft: 20,
 									position: 'absolute',
-									translate: '-10px 65px',
+									translate: '-5% 60%',
 								}}
 								color={color_black}
 								onChange={(color) => {
@@ -378,7 +378,7 @@ function App() {
 									zIndex: 2,
 									marginLeft: 20,
 									position: 'absolute',
-									translate: '-10px 65px',
+									translate: '-5% 60%',
 								}}
 								color={color_white}
 								onChange={(color) => {
