@@ -3,6 +3,7 @@
     src: url('./assets/AldotheApache.woff');
 }
 
+@import url('https://fonts.cdnfonts.com/css/aldo-the-apache');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap');
 
 :root {
@@ -23,6 +24,7 @@ body {
 
 .header-logo {
     font-family: scaleFont;
+    font-family: 'Aldo the Apache', sans-serif;
     font-weight: 200;
     font-size: 1.25rem;
 }
@@ -57,14 +59,11 @@ body {
 
 .nav-content {
     margin: 0 auto;
-    max-width: 50rem;
-    width: 80%;
+    width: min(80%);
 }
 
 .container {
     margin-block: 5rem;
-    max-width: 50rem;
-    margin: 0 auto;
     /* background-color: hsla(var(--clr-secondary), 0.05); */
 }
 
@@ -73,10 +72,9 @@ body {
     -moz-user-select: none;
     user-select: none;
     margin: 0 auto;
-    padding-inline: clamp(2rem, 5vw, 5rem);
+    padding-inline: 2rem;
     /* background-color: hsla(var(--clr-secondary), 0.05); */
 }
-
 
 .scale {
     margin-block: 2rem;
@@ -84,7 +82,7 @@ body {
 
 .control-panel {
     color: #db7c7c;
-    /* padding-inline: 2rem; */
+    padding-inline: 2rem;
     display: grid;
     gap: 1.5rem;
     grid-template-columns: repeat(1, 1fr);
@@ -93,7 +91,7 @@ body {
 }
 
 .result {
-    margin-block: 3rem;
+    margin-block: 6rem;
 }
 
 .card {
@@ -128,18 +126,9 @@ body {
 
 .picker {
     position: relative;
-    display: flex;
     padding: 1.5rem;
     border: 1px solid var(--clr-off);
     border-radius: 0.5rem;
-}
-
-.picker>span {
-    margin-left: auto;
-}
-
-.modal {
-    justify-self: center;
 }
 
 code {
@@ -166,20 +155,29 @@ code {
 
 
 .checkbox-container {
-    /* display: block; */
+    display: block;
     position: relative;
-    padding-left: 3.5em;
+    padding-left: 2rem;
     line-height: 1rem;
     cursor: pointer;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.check {
     display: flex;
     align-items: center;
-    padding-block: 1.5rem;
+    padding: 1.5rem;
     border-radius: 0.5rem;
     border: 1.5px solid var(--clr-off);
+}
+
+.check * {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-drag: none;
 }
 
 /* Hide the browser's default checkbox */
@@ -194,8 +192,8 @@ code {
 /* Create a custom checkbox */
 .checkmark {
     position: absolute;
-    top: calc(50% - 9px);
-    left: 1.5rem;
+    top: 0;
+    left: 0;
     height: 14px;
     width: 14px;
     border-radius: 50%;
@@ -206,11 +204,11 @@ code {
 /* When the checkbox is checked, add a blue background */
 .checkbox-container input:checked~.checkmark {
     background-color: var(--clr-accent);
-    box-shadow: inset 0px 0px 0px 2px white;
+    box-shadow: inset 0px 0px 0px 3px white;
     border: 2px solid var(--clr-accent);
 }
 
-.checkbox-container:has(input:checked) {
+.check:has(.checkbox-container input:checked) {
     background: var(--clr-fill);
     outline: 2px solid var(--clr-accent);
 }
@@ -230,24 +228,4 @@ code {
 /* Style the checkmark/indicator */
 .checkbox-container .checkmark:after {
     height: 0;
-}
-
-@media screen and (width >=600px) {
-    .control-panel {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .key-array {
-        grid-column: 1/-1;
-        justify-content: space-between;
-    }
-
-    .modal {
-        grid-row: 5/4;
-        justify-self: center;
-    }
-
-    .right {
-        grid-column: 2/3;
-    }
 }

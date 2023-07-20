@@ -1,7 +1,7 @@
 import React, { MouseEvent, ReactElement, ReactNode, useEffect } from 'react';
-import Prism from 'prismjs';
-import 'prismjs/components/prism-javascript'; // Language
-import 'prismjs/themes/prism.css'; // Theme
+import hljs from 'highlight.js';
+
+import 'highlight.js/styles/tokyo-night-dark.css';
 
 import { Sketch } from '@uiw/react-color';
 // styles
@@ -44,7 +44,7 @@ function Scale({
 	setPress,
 	color_white = '#ff0055',
 	color_black = '#aa0044',
-	width = '500px',
+	width = '80%',
 }: AppProps) {
 	function handlePressed(event: MouseEvent) {
 		if (event.target) {
@@ -238,31 +238,30 @@ type Props = {
 };
 
 function App() {
-	useEffect(() => {
-		Prism.highlightAll();
-	}, []);
-
 	const [press, setPress] = React.useState([
 		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	]);
 
 	const [start, setStart] = React.useState('C');
 	const [labels, setLabels] = React.useState(false);
-	const [half, setHalf] = React.useState(false);
+	const [half, setHalf] = React.useState(true);
 	const [color_black, setColor_black] = React.useState('#AA0044');
 	const [color_white, setColor_white] = React.useState('#FF0055');
 	const [pickerBlack, setPickerBlack] = React.useState(false);
 	const [pickerWhite, setPickerWhite] = React.useState(false);
-	const [copyButton, setCopyButton] = React.useState('Copy');
+
+	useEffect(() => {
+		hljs.highlightAll();
+	}, [start, labels, half, color_black, color_white, press]);
 
 	const code = `<Scale
-	labels = ${labels}
-	half = ${half}
-	start = '${start}'
-	pressed = [${press}]
-	color_black = '${color_black}' 
-	color_white = '${color_white}'
-	width = '600px'
+    labels = { ${labels} }
+    half = { ${half} }
+    start = '${start}'
+    pressed = { [${press}] }
+    color_black = '${color_black}' 
+    color_white = '${color_white}'
+    width = '80%'
 />
 `;
 	const Card: React.FC<Props> = (props) => {
@@ -276,6 +275,10 @@ function App() {
 		);
 	};
 
+	function handleChangeHalf() {
+		setHalf(!half);
+	}
+
 	function handleChangeLabels() {
 		setLabels(!labels);
 	}
@@ -287,58 +290,64 @@ function App() {
 		setPickerWhite((prev) => !prev);
 	}
 
+	function popupPickerWhiteClose() {
+		setPickerWhite(false);
+	}
+
+	function popupPickerBlackClose() {
+		setPickerBlack(false);
+	}
+
 	return (
 		<div className="App">
-			<div className="Navbar">
-				<h1>Scale Maker</h1>
+			<div className="navbar">
+				<div className="nav-content">
+					<div className="header-logo gradient">
+						<h1 className="">Scale Maker</h1>
+					</div>
+				</div>
 			</div>
+
 			<div className="container">
-				<h1>Make Your Scale</h1>
-				<Scale
-					start={start}
-					labels={labels}
-					half={half}
-					press={press}
-					setPress={setPress}
-					color_black={color_black}
-					color_white={color_white}
-					width="800px"
-				/>
-				<div className="labelSelector">
-					<div className="line">
-						<p>Labels : </p>
-						<label
-							className="toggle"
-							htmlFor="labels"
-						>
+				<div className="scale">
+					<Scale
+						start={start}
+						labels={labels}
+						half={half}
+						press={press}
+						setPress={setPress}
+						color_black={color_black}
+						color_white={color_white}
+						width={'100%'}
+					/>
+				</div>
+				<div className="control-panel">
+					<div className="check">
+						<label className="checkbox-container">
+							Labels
 							<input
-								className="toggle__input"
-								name=""
 								type="checkbox"
-								id="labels"
 								onChange={handleChangeLabels}
-							></input>
-							<div className="toggle__fill"></div>
+							/>
+							<span className="checkmark"></span>
 						</label>
 					</div>
-					<div className="line">
-						<p>Half : </p>
-						<label
-							className="toggle"
-							htmlFor="half"
-						>
+					<div
+						className="check"
+						onClick={() => {}}
+					>
+						<label className="checkbox-container">
+							Extended Scale
 							<input
-								className="toggle__input"
-								name=""
+								aria-hidden="false"
+								className="sr-only"
 								type="checkbox"
-								id="half"
-								onChange={() => setHalf(!half)}
-							></input>
-							<div className="toggle__fill"></div>
+								onChange={handleChangeHalf}
+							/>
+							<span className="checkmark"></span>
 						</label>
 					</div>
-					<div className="line">
-						<p>Start : </p>
+					<div className="key-array">
 						<Card>C</Card>
 						<Card>D</Card>
 						<Card>E</Card>
@@ -347,69 +356,96 @@ function App() {
 						<Card>A</Card>
 						<Card>B</Card>
 					</div>
-					<div className="line">
-						<p>Color Black : </p>
-						{pickerBlack && (
-							<Sketch
-								style={{
-									zIndex: 2,
-									marginLeft: 20,
-									position: 'absolute',
-									translate: '-5% 60%',
-								}}
-								color={color_black}
-								onChange={(color) => {
-									setColor_black(color.hex.toLocaleUpperCase());
-								}}
-							/>
-						)}
-						<div
-							className="card"
-							onClick={popupPickerBlack}
-						>
-							{color_black}
-						</div>
+					<div
+						className={pickerWhite ? "picker active" : "picker"}
+						onClick={popupPickerWhite}
+					>
+						White key <span>{color_white}</span>
 					</div>
-					<div className="line">
-						<p>Color White : </p>
-						{pickerWhite && (
-							<Sketch
+					{pickerWhite ? (
+						<div
+							className="modal"
+							style={{
+								position: 'relative',
+								// top: '5%',
+								zIndex: '2',
+							}}
+						>
+							<div
 								style={{
-									zIndex: 2,
-									marginLeft: 20,
-									position: 'absolute',
-									translate: '-5% 60%',
+									position: 'fixed',
+									top: '0px',
+									right: '0px',
+									bottom: '20px',
+									left: '0px',
 								}}
+								onClick={popupPickerWhiteClose}
+							/>
+							<Sketch
 								color={color_white}
 								onChange={(color) => {
-									setColor_white(color.hex.toLocaleUpperCase());
+									setColor_white(color.hex.toString().toLocaleUpperCase());
 								}}
 							/>
-						)}
-						<div
-							className="card"
-							onClick={popupPickerWhite}
-						>
-							{color_white}
 						</div>
+					) : null}
+					<div
+						className={pickerBlack ? 'picker active' : 'picker'}
+						onClick={popupPickerBlack}
+					>
+						Black Key <span>{color_black}</span>
+					</div>
+					{pickerBlack ? (
+						<div
+							className="modal right"
+							style={{
+								position: 'relative',
+								zIndex: '2',
+							}}
+						>
+							<div
+								style={{
+									position: 'fixed',
+									top: '0px',
+									right: '0px',
+									bottom: '20px',
+									left: '0px',
+								}}
+								onClick={popupPickerBlackClose}
+							/>
+							<Sketch
+								color={color_black}
+								onChange={(color) => {
+									setColor_black(color.hex.toString().toLocaleUpperCase());
+								}}
+							/>
+						</div>
+					) : null}
+				</div>
+				<div className="result">
+					<div className="code-block">
+						<pre>
+							<code className="language-javascript">{code}</code>
+							<button
+								id="button"
+								className="copyButton"
+								onClick={(e) => {
+									navigator.clipboard.writeText(code);
+									let btn = document.getElementById(
+										(e.target as HTMLButtonElement).id
+									);
+									if (btn) btn.innerHTML = 'Copied!';
+									setTimeout(() => {
+										if (btn) btn.innerHTML = 'Copy';
+										// console.log(e.target as HTMLInputElement);
+									}, 1000);
+								}}
+							>
+								Copy
+							</button>
+						</pre>
 					</div>
 				</div>
-				<pre>
-					<code className="language-javascript">{code}</code>
-					<button
-						className="copyButton"
-						onClick={(e) => {
-							navigator.clipboard.writeText(code);
-							setCopyButton('Copied!');
-							setTimeout(() => {
-								setCopyButton('Copy');
-								// console.log(e.target as HTMLInputElement);
-							}, 1000);
-						}}
-					>
-						{copyButton}
-					</button>
-				</pre>
 			</div>
 		</div>
 	);
