@@ -143,6 +143,9 @@ body {
 }
 
 code {
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    user-select: text;
     border-radius: 0.5rem;
 }
 

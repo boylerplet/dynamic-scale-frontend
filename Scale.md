@@ -11,7 +11,7 @@ This is repository exports a react component which will render a piano scale wit
     labels = true
     half = false
     start = 'C'
-    pressed = [0,1,2,3,4,5,6,7,8]
+    pressed = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     color_black = '#ff0055' 
     color_white = '#aa0044'
     width = '600px'
