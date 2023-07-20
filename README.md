@@ -12,4 +12,5 @@ You will also see any lint errors in the console.
 
 ## Screenshots
 
-![image](https://github.com/amrutwali/dynamic-scale-frontend/assets/54875908/915b6075-33aa-4f43-9e6a-bb358fe5a400)
+![image](https://github.com/amrutwali/dynamic-scale-frontend/assets/54875908/870d9b5a-b4ac-4185-a772-e84398e0151b)
+
